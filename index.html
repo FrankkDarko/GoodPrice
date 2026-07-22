@@ -76,7 +76,7 @@
       </div>
       <div class="hero-stats">
         <div class="stat"><strong id="stat-services">0</strong><span data-i18n="hero.stat1">services référencés</span></div>
-        <div class="stat"><strong>2</strong><span data-i18n="hero.stat2">univers : VRChat & en ligne</span></div>
+        <div class="stat"><strong id="stat-categories">4</strong><span data-i18n="hero.stat2">catégories : 3D, 2D, VRChat…</span></div>
         <div class="stat"><strong>100%</strong><span data-i18n="hero.stat3">gratuit, calcul local</span></div>
       </div>
     </div>
@@ -100,16 +100,7 @@
               <span class="step-num">1</span>
               <h3 data-i18n="calc.step1">Type de commission</h3>
             </div>
-            <div class="category-tabs" role="tablist">
-              <button class="cat-tab active" data-category="vrchat" type="button">
-                <span class="cat-icon">🕶️</span>
-                <span>VRChat</span>
-              </button>
-              <button class="cat-tab" data-category="online" type="button">
-                <span class="cat-icon">💻</span>
-                <span data-i18n="calc.catOnline">Prestations en ligne</span>
-              </button>
-            </div>
+            <div class="category-tabs" id="category-tabs" role="tablist"><!-- injected --></div>
             <div class="service-grid" id="service-grid"><!-- injected --></div>
           </div>
 
@@ -202,6 +193,7 @@
                 <span id="market-min">—</span>
                 <span id="market-max">—</span>
               </div>
+              <p class="field-hint" data-i18n="result.marketHint">Fourchette ajustée à votre niveau d'expérience.</p>
             </div>
 
             <div class="breakdown">
@@ -225,10 +217,7 @@
         <h2 data-i18n="rates.title">Tarifs de référence du marché</h2>
         <p data-i18n="rates.sub">Fourchettes constatées sur les plateformes de commissions (VRChat, réseaux créatifs, freelancing). Données indicatives.</p>
       </div>
-      <div class="rates-tabs">
-        <button class="rate-tab active" data-rates="vrchat" type="button">🕶️ VRChat</button>
-        <button class="rate-tab" data-rates="online" type="button">💻 <span data-i18n="calc.catOnline">Prestations en ligne</span></button>
-      </div>
+      <div class="rates-tabs" id="rates-tabs"><!-- injected --></div>
       <div class="rates-grid" id="rates-grid"><!-- injected --></div>
     </div>
   </section>

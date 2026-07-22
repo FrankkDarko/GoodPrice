@@ -26,7 +26,7 @@ npx serve .
 index.html          — page unique (hero, calculateur, tarifs, conseils)
 assets/css/style.css — styles (thème sombre, accents menthe/cyan)
 assets/js/i18n.js   — traductions FR/EN + détection de langue
-assets/js/data.js   — base de tarifs de référence (17 services)
+assets/js/data.js   — base de tarifs de référence (27 services, 4 catégories : 3D, 2D, VRChat, autres)
 assets/js/app.js    — logique du calculateur et rendu
 assets/img/logo.svg — logo
 ```

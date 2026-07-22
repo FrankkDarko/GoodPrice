@@ -7,7 +7,162 @@
 
 const EUR_RATE = 0.93; // 1 USD ≈ 0.93 EUR
 
+/* Catégories, dans l'ordre d'affichage (la 1re est sélectionnée par défaut) */
+const CATEGORIES = [
+  { id: "3d", icon: "🧊", name: { fr: "3D générale", en: "General 3D" } },
+  { id: "2d", icon: "🎨", name: { fr: "2D & Illustration", en: "2D & Illustration" } },
+  { id: "vrchat", icon: "🕶️", name: { fr: "VRChat", en: "VRChat" } },
+  { id: "online", icon: "💻", name: { fr: "Autres prestations", en: "Other services" } },
+];
+
 const SERVICES = [
+  /* ---------------- 3D générale ---------------- */
+  {
+    id: "3d-prop",
+    category: "3d",
+    icon: "📦",
+    name: { fr: "Modélisation d'objet / prop", en: "Object / prop modeling" },
+    desc: {
+      fr: "Hard surface ou organique : accessoires, armes, mobilier, véhicules simples.",
+      en: "Hard surface or organic: accessories, weapons, furniture, simple vehicles.",
+    },
+    hourly: 25, minFee: 40, typicalHours: 6, market: [50, 400],
+  },
+  {
+    id: "3d-character",
+    category: "3d",
+    icon: "🧍",
+    name: { fr: "Personnage 3D complet", en: "Full 3D character" },
+    desc: {
+      fr: "Sculpt, retopologie, UV et textures d'un personnage prêt à rigger.",
+      en: "Sculpt, retopology, UVs and textures of a rig-ready character.",
+    },
+    hourly: 30, minFee: 200, typicalHours: 40, market: [250, 2500],
+  },
+  {
+    id: "3d-env",
+    category: "3d",
+    icon: "🏞️",
+    name: { fr: "Environnement / décor 3D", en: "3D environment / set" },
+    desc: {
+      fr: "Scènes et décors pour jeux, cinématiques ou rendus d'ambiance.",
+      en: "Scenes and sets for games, cinematics or mood renders.",
+    },
+    hourly: 28, minFee: 150, typicalHours: 30, market: [200, 1500],
+  },
+  {
+    id: "3d-texturing",
+    category: "3d",
+    icon: "🖌️",
+    name: { fr: "Texturing & matériaux PBR", en: "Texturing & PBR materials" },
+    desc: {
+      fr: "UV, baking et texturing Substance/Blender d'un modèle existant.",
+      en: "UVs, baking and Substance/Blender texturing of an existing model.",
+    },
+    hourly: 25, minFee: 40, typicalHours: 6, market: [50, 350],
+  },
+  {
+    id: "3d-rigging",
+    category: "3d",
+    icon: "🦴",
+    name: { fr: "Rigging & skinning", en: "Rigging & skinning" },
+    desc: {
+      fr: "Squelette, contrôleurs, weight painting — personnage ou mécanique.",
+      en: "Skeleton, controllers, weight painting — character or mechanical.",
+    },
+    hourly: 28, minFee: 60, typicalHours: 8, market: [80, 500],
+  },
+  {
+    id: "3d-anim",
+    category: "3d",
+    icon: "🎞️",
+    name: { fr: "Animation 3D", en: "3D animation" },
+    desc: {
+      fr: "Cycles, actions et cinématiques animées sur un rig fourni.",
+      en: "Cycles, actions and animated cinematics on a provided rig.",
+    },
+    hourly: 30, minFee: 60, typicalHours: 8, market: [80, 600],
+  },
+  {
+    id: "3d-render",
+    category: "3d",
+    icon: "💡",
+    name: { fr: "Rendu produit / visualisation", en: "Product render / visualization" },
+    desc: {
+      fr: "Mise en scène, éclairage et rendus haute qualité d'un produit ou modèle.",
+      en: "Staging, lighting and high-quality renders of a product or model.",
+    },
+    hourly: 30, minFee: 50, typicalHours: 5, market: [60, 400],
+  },
+
+  /* ---------------- 2D & Illustration ---------------- */
+  {
+    id: "2d-illustration",
+    category: "2d",
+    icon: "🖼️",
+    name: { fr: "Illustration / character art", en: "Illustration / character art" },
+    desc: {
+      fr: "Illustration personnalisée : portrait, full body, scène complète.",
+      en: "Custom illustration: portrait, full body, full scene.",
+    },
+    hourly: 25, minFee: 40, typicalHours: 8, market: [50, 500],
+  },
+  {
+    id: "2d-concept",
+    category: "2d",
+    icon: "💭",
+    name: { fr: "Concept art / character design", en: "Concept art / character design" },
+    desc: {
+      fr: "Recherches, turnarounds et fiches de personnage ou d'environnement.",
+      en: "Exploration sheets, turnarounds and character or environment sheets.",
+    },
+    hourly: 28, minFee: 50, typicalHours: 8, market: [60, 500],
+  },
+  {
+    id: "2d-logo",
+    category: "2d",
+    icon: "🏷️",
+    name: { fr: "Logo & identité visuelle", en: "Logo & brand identity" },
+    desc: {
+      fr: "Création de logo, déclinaisons et mini charte graphique.",
+      en: "Logo creation, variations and a mini brand guide.",
+    },
+    hourly: 30, minFee: 60, typicalHours: 8, market: [80, 800],
+  },
+  {
+    id: "2d-emotes",
+    category: "2d",
+    icon: "😆",
+    name: { fr: "Emotes & badges Twitch", en: "Twitch emotes & badges" },
+    desc: {
+      fr: "Packs d'emotes, badges d'abonnés et panels pour streamers.",
+      en: "Emote packs, sub badges and panels for streamers.",
+    },
+    hourly: 22, minFee: 15, typicalHours: 3, market: [15, 150],
+  },
+  {
+    id: "2d-vtuber",
+    category: "2d",
+    icon: "🎭",
+    name: { fr: "Modèle VTuber (Live2D)", en: "VTuber model (Live2D)" },
+    desc: {
+      fr: "Art du modèle, découpe et rigging Live2D prêt pour le stream.",
+      en: "Model art, cutting and Live2D rigging, stream-ready.",
+    },
+    hourly: 30, minFee: 150, typicalHours: 25, market: [200, 2000],
+  },
+  {
+    id: "2d-social",
+    category: "2d",
+    icon: "📱",
+    name: { fr: "Bannières / overlays / réseaux", en: "Banners / overlays / social" },
+    desc: {
+      fr: "Bannières, miniatures, overlays de stream et visuels réseaux sociaux.",
+      en: "Banners, thumbnails, stream overlays and social media visuals.",
+    },
+    hourly: 22, minFee: 25, typicalHours: 4, market: [30, 200],
+  },
+
   /* ---------------- VRChat ---------------- */
   {
     id: "vrc-texture",
@@ -109,40 +264,7 @@ const SERVICES = [
     hourly: 20, minFee: 20, typicalHours: 4, market: [20, 150],
   },
 
-  /* ---------------- Online services ---------------- */
-  {
-    id: "on-logo",
-    category: "online",
-    icon: "🏷️",
-    name: { fr: "Logo & identité visuelle", en: "Logo & brand identity" },
-    desc: {
-      fr: "Création de logo, déclinaisons et mini charte graphique.",
-      en: "Logo creation, variations and a mini brand guide.",
-    },
-    hourly: 30, minFee: 60, typicalHours: 8, market: [80, 800],
-  },
-  {
-    id: "on-illustration",
-    category: "online",
-    icon: "🖌️",
-    name: { fr: "Illustration / character art", en: "Illustration / character art" },
-    desc: {
-      fr: "Illustration personnalisée : portrait, full body, scène complète.",
-      en: "Custom illustration: portrait, full body, full scene.",
-    },
-    hourly: 25, minFee: 40, typicalHours: 8, market: [50, 500],
-  },
-  {
-    id: "on-emotes",
-    category: "online",
-    icon: "😆",
-    name: { fr: "Emotes & badges Twitch", en: "Twitch emotes & badges" },
-    desc: {
-      fr: "Packs d'emotes, badges d'abonnés et panels pour streamers.",
-      en: "Emote packs, sub badges and panels for streamers.",
-    },
-    hourly: 22, minFee: 15, typicalHours: 3, market: [15, 150],
-  },
+  /* ---------------- Autres prestations en ligne ---------------- */
   {
     id: "on-web",
     category: "online",

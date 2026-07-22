@@ -288,9 +288,10 @@ button { font-family: inherit; cursor: pointer; }
 .step-head h3 { font-size: 1.12rem; }
 
 /* Category tabs */
-.category-tabs { display: flex; gap: 12px; margin-bottom: 20px; }
+.category-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
 .cat-tab {
   flex: 1;
+  min-width: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -640,7 +641,7 @@ input[type="range"]::-moz-range-thumb {
 .result-advice:empty { display: none; }
 
 /* ---------- Rates section ---------- */
-.rates-tabs { display: flex; justify-content: center; gap: 12px; margin-bottom: 34px; }
+.rates-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 34px; }
 .rate-tab {
   padding: 10px 22px;
   border-radius: 999px;

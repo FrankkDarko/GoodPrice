@@ -5,16 +5,16 @@
 
 /* ---------- State ---------- */
 const state = {
-  category: "vrchat",
-  serviceId: "vrc-texture",
-  hours: 8,
+  category: CATEGORIES[0].id,
+  serviceId: SERVICES.find((s) => s.category === CATEGORIES[0].id).id,
+  hours: 6,
   experience: "intermediate",
   complexity: "standard",
   options: new Set(),
   revisions: 0,
   margin: 15,
   currency: localStorage.getItem("gp-currency") || (detectLang() === "fr" ? "EUR" : "USD"),
-  ratesTab: "vrchat",
+  ratesTab: CATEGORIES[0].id,
 };
 
 /* ---------- Helpers ---------- */
@@ -42,6 +42,12 @@ function fmt(usd, opts = {}) {
 /** Arrondi "prix psychologique" : au 5 le plus proche. */
 function roundPrice(v) {
   return Math.round(v / 5) * 5 || Math.round(v);
+}
+
+/** Fourchette du marché ajustée au niveau d'expérience sélectionné. */
+function marketForExperience(svc) {
+  const mult = EXPERIENCE_MULT[state.experience];
+  return [roundPrice(svc.market[0] * mult), roundPrice(svc.market[1] * mult)];
 }
 
 /* ---------- Core computation ---------- */
@@ -84,18 +90,60 @@ function computeEstimate() {
   };
 }
 
+/* ---------- Rendering : category tabs ---------- */
+function renderCategoryTabs() {
+  const wrap = $("#category-tabs");
+  wrap.innerHTML = "";
+  CATEGORIES.forEach((cat) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "cat-tab" + (cat.id === state.category ? " active" : "");
+    btn.innerHTML = `<span class="cat-icon">${cat.icon}</span><span>${cat.name[currentLang]}</span>`;
+    btn.addEventListener("click", () => {
+      state.category = cat.id;
+      const first = SERVICES.find((s) => s.category === cat.id);
+      state.serviceId = first.id;
+      state.hours = first.typicalHours;
+      $("#hours-input").value = first.typicalHours;
+      $("#hours-value").textContent = first.typicalHours;
+      renderCategoryTabs();
+      renderServices();
+      renderResult();
+    });
+    wrap.appendChild(btn);
+  });
+}
+
+function renderRatesTabs() {
+  const wrap = $("#rates-tabs");
+  wrap.innerHTML = "";
+  CATEGORIES.forEach((cat) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "rate-tab" + (cat.id === state.ratesTab ? " active" : "");
+    btn.innerHTML = `${cat.icon} <span>${cat.name[currentLang]}</span>`;
+    btn.addEventListener("click", () => {
+      state.ratesTab = cat.id;
+      renderRatesTabs();
+      renderRates();
+    });
+    wrap.appendChild(btn);
+  });
+}
+
 /* ---------- Rendering : services ---------- */
 function renderServices() {
   const grid = $("#service-grid");
   grid.innerHTML = "";
   SERVICES.filter((s) => s.category === state.category).forEach((svc) => {
+    const [mMin, mMax] = marketForExperience(svc);
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "service-item" + (svc.id === state.serviceId ? " active" : "");
     btn.innerHTML = `
       <span class="svc-icon">${svc.icon}</span>
       <span class="svc-name">${svc.name[currentLang]}</span>
-      <span class="svc-rate">${fmt(svc.market[0])}–${fmt(svc.market[1])}</span>
+      <span class="svc-rate">${fmt(mMin)}–${fmt(mMax)}</span>
     `;
     btn.addEventListener("click", () => {
       state.serviceId = svc.id;
@@ -184,8 +232,8 @@ function renderResult() {
     .join("") +
     `<li class="total"><span>${t("bd.total")}</span><strong>${fmt(est.total)}</strong></li>`;
 
-  /* Market comparison */
-  const [mMin, mMax] = est.svc.market;
+  /* Market comparison — range adjusted to the selected experience level */
+  const [mMin, mMax] = marketForExperience(est.svc);
   $("#market-min").textContent = fmt(mMin);
   $("#market-max").textContent = fmt(mMax);
 
@@ -289,7 +337,10 @@ function wireSegmented(id, key) {
       seg.querySelectorAll("button").forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
       state[key] = btn.dataset.value;
-      if (key === "experience") renderExperienceHint();
+      if (key === "experience") {
+        renderExperienceHint();
+        renderServices(); // les fourchettes affichées dépendent du niveau
+      }
       renderResult();
     });
   });
@@ -298,8 +349,10 @@ function wireSegmented(id, key) {
 /* ---------- Init ---------- */
 function renderAll() {
   applyTranslations();
+  renderCategoryTabs();
   renderServices();
   renderOptions();
+  renderRatesTabs();
   renderRates();
   renderTips();
   renderExperienceHint();
@@ -320,21 +373,6 @@ document.addEventListener("DOMContentLoaded", () => {
     state.currency = currencySelect.value;
     localStorage.setItem("gp-currency", state.currency);
     renderAll();
-  });
-
-  /* Category tabs (calculator) */
-  document.querySelectorAll(".cat-tab").forEach((tab) => {
-    tab.addEventListener("click", () => {
-      document.querySelectorAll(".cat-tab").forEach((tb) => tb.classList.remove("active"));
-      tab.classList.add("active");
-      state.category = tab.dataset.category;
-      const first = SERVICES.find((s) => s.category === state.category);
-      state.serviceId = first.id;
-      state.hours = first.typicalHours;
-      $("#hours-input").value = first.typicalHours;
-      renderServices();
-      renderResult();
-    });
   });
 
   /* Hours slider */
@@ -367,16 +405,6 @@ document.addEventListener("DOMContentLoaded", () => {
     state.margin = Number(marginInput.value);
     $("#margin-value").textContent = state.margin;
     renderResult();
-  });
-
-  /* Rates tabs */
-  document.querySelectorAll(".rate-tab").forEach((tab) => {
-    tab.addEventListener("click", () => {
-      document.querySelectorAll(".rate-tab").forEach((tb) => tb.classList.remove("active"));
-      tab.classList.add("active");
-      state.ratesTab = tab.dataset.rates;
-      renderRates();
-    });
   });
 
   /* Copy button */
