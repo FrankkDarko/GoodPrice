@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Good Price — Estimez le juste prix de vos commissions</title>
+  <meta name="description" content="Good Price calcule le juste prix de vente de vos commissions en ligne : VRChat (textures, avatars, scripts, mondes) et prestations créatives classiques." />
+  <link rel="icon" type="image/svg+xml" href="assets/img/logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <!-- ======= HEADER ======= -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Good Price">
+        <svg class="brand-logo" viewBox="0 0 64 64" aria-hidden="true">
+          <defs>
+            <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#34e0a1"/>
+              <stop offset="1" stop-color="#1fb7d4"/>
+            </linearGradient>
+          </defs>
+          <path d="M36.6 6.2 55.9 25.5a6 6 0 0 1 0 8.5L34.1 55.8a6 6 0 0 1-8.5 0L6.3 36.5A6 6 0 0 1 4.5 32.2l.3-19.9A6 6 0 0 1 10.7 6.4l19.9-.2a6 6 0 0 1 4.3 1.7 6 6 0 0 1 1.7 0Z" fill="url(#lg)"/>
+          <circle cx="17.5" cy="17.5" r="4.2" fill="#0b1220"/>
+          <path d="M24 38.5l6.5 6.5L45 30.5" fill="none" stroke="#0b1220" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="brand-name">Good<em>Price</em></span>
+      </a>
+
+      <nav class="main-nav">
+        <a href="#calculator" data-i18n="nav.calculator">Calculateur</a>
+        <a href="#rates" data-i18n="nav.rates">Tarifs du marché</a>
+        <a href="#tips" data-i18n="nav.tips">Conseils</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="select-pill">
+          <select id="currency-select" aria-label="Currency">
+            <option value="EUR">€ EUR</option>
+            <option value="USD">$ USD</option>
+          </select>
+        </div>
+        <button id="lang-toggle" class="lang-toggle" type="button" aria-label="Switch language">
+          <span class="lang-flag" id="lang-flag">🇬🇧</span>
+          <span id="lang-label">EN</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======= HERO ======= -->
+  <section class="hero" id="top">
+    <div class="hero-bg" aria-hidden="true">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="grid-overlay"></div>
+    </div>
+    <div class="container hero-inner">
+      <span class="hero-badge" data-i18n="hero.badge">✨ Estimateur de prix pour créateurs</span>
+      <h1 class="hero-title">
+        <span data-i18n="hero.title1">Vendez vos commissions</span><br/>
+        <span class="gradient-text" data-i18n="hero.title2">au juste prix.</span>
+      </h1>
+      <p class="hero-sub" data-i18n="hero.sub">
+        Good Price estime le meilleur prix de vente pour vos commissions en ligne —
+        textures, avatars et scripts VRChat, illustration, montage, dev web… —
+        en tenant compte du temps, de la complexité, des options et de votre marge.
+      </p>
+      <div class="hero-cta">
+        <a href="#calculator" class="btn btn-primary" data-i18n="hero.cta1">Calculer mon prix</a>
+        <a href="#rates" class="btn btn-ghost" data-i18n="hero.cta2">Voir les tarifs du marché</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><strong id="stat-services">0</strong><span data-i18n="hero.stat1">services référencés</span></div>
+        <div class="stat"><strong>2</strong><span data-i18n="hero.stat2">univers : VRChat & en ligne</span></div>
+        <div class="stat"><strong>100%</strong><span data-i18n="hero.stat3">gratuit, calcul local</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= CALCULATOR ======= -->
+  <section class="section" id="calculator">
+    <div class="container">
+      <div class="section-head">
+        <h2 data-i18n="calc.title">Calculateur de prix</h2>
+        <p data-i18n="calc.sub">Répondez à quelques questions, obtenez un prix juste et argumenté.</p>
+      </div>
+
+      <div class="calc-layout">
+        <!-- ---- Form column ---- -->
+        <div class="calc-form">
+
+          <!-- Step 1 : category -->
+          <div class="card step-card">
+            <div class="step-head">
+              <span class="step-num">1</span>
+              <h3 data-i18n="calc.step1">Type de commission</h3>
+            </div>
+            <div class="category-tabs" role="tablist">
+              <button class="cat-tab active" data-category="vrchat" type="button">
+                <span class="cat-icon">🕶️</span>
+                <span>VRChat</span>
+              </button>
+              <button class="cat-tab" data-category="online" type="button">
+                <span class="cat-icon">💻</span>
+                <span data-i18n="calc.catOnline">Prestations en ligne</span>
+              </button>
+            </div>
+            <div class="service-grid" id="service-grid"><!-- injected --></div>
+          </div>
+
+          <!-- Step 2 : time & profile -->
+          <div class="card step-card">
+            <div class="step-head">
+              <span class="step-num">2</span>
+              <h3 data-i18n="calc.step2">Temps & profil</h3>
+            </div>
+
+            <div class="field">
+              <label for="hours-input">
+                <span data-i18n="calc.hours">Temps de travail estimé</span>
+                <span class="field-value"><span id="hours-value">8</span> <span data-i18n="calc.hoursUnit">h</span></span>
+              </label>
+              <input type="range" id="hours-input" min="1" max="120" step="1" value="8" />
+              <div class="range-scale"><span>1h</span><span>120h</span></div>
+            </div>
+
+            <div class="field">
+              <label data-i18n="calc.experience">Votre niveau d'expérience</label>
+              <div class="segmented" id="experience-seg">
+                <button type="button" data-value="beginner" data-i18n="calc.expBeginner">Débutant</button>
+                <button type="button" data-value="intermediate" class="active" data-i18n="calc.expIntermediate">Confirmé</button>
+                <button type="button" data-value="expert" data-i18n="calc.expExpert">Expert</button>
+              </div>
+              <p class="field-hint" id="experience-hint"></p>
+            </div>
+
+            <div class="field">
+              <label data-i18n="calc.complexity">Complexité du projet</label>
+              <div class="segmented" id="complexity-seg">
+                <button type="button" data-value="simple" data-i18n="calc.cxSimple">Simple</button>
+                <button type="button" data-value="standard" class="active" data-i18n="calc.cxStandard">Standard</button>
+                <button type="button" data-value="complex" data-i18n="calc.cxComplex">Complexe</button>
+                <button type="button" data-value="advanced" data-i18n="calc.cxAdvanced">Très complexe</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 : options -->
+          <div class="card step-card">
+            <div class="step-head">
+              <span class="step-num">3</span>
+              <h3 data-i18n="calc.step3">Options & droits</h3>
+            </div>
+            <div class="options-list" id="options-list"><!-- injected --></div>
+
+            <div class="field field-inline">
+              <label for="revisions-input" data-i18n="calc.revisions">Révisions incluses au-delà de 2</label>
+              <div class="stepper">
+                <button type="button" id="rev-minus" aria-label="-">−</button>
+                <span id="revisions-value">0</span>
+                <button type="button" id="rev-plus" aria-label="+">+</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="margin-input">
+                <span data-i18n="calc.margin">Marge de sécurité</span>
+                <span class="field-value"><span id="margin-value">15</span>%</span>
+              </label>
+              <input type="range" id="margin-input" min="0" max="50" step="5" value="15" />
+              <p class="field-hint" data-i18n="calc.marginHint">Couvre les imprévus, allers-retours client et frais de plateforme.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---- Result column ---- -->
+        <aside class="calc-result">
+          <div class="card result-card" id="result-card">
+            <p class="result-label" data-i18n="result.recommended">Prix de vente recommandé</p>
+            <div class="result-price" id="result-price">—</div>
+            <div class="result-range">
+              <span data-i18n="result.range">Fourchette conseillée</span>
+              <strong id="result-range-values">—</strong>
+            </div>
+
+            <div class="market-compare">
+              <div class="market-head">
+                <span data-i18n="result.market">Position vs marché</span>
+                <span class="market-badge" id="market-badge">—</span>
+              </div>
+              <div class="market-bar">
+                <div class="market-bar-track"></div>
+                <div class="market-bar-fill" id="market-fill"></div>
+                <div class="market-marker" id="market-marker"></div>
+              </div>
+              <div class="market-scale">
+                <span id="market-min">—</span>
+                <span id="market-max">—</span>
+              </div>
+            </div>
+
+            <div class="breakdown">
+              <h4 data-i18n="result.breakdown">Détail du calcul</h4>
+              <ul id="breakdown-list"><!-- injected --></ul>
+            </div>
+
+            <div class="result-advice" id="result-advice"></div>
+
+            <button class="btn btn-primary btn-block" id="copy-btn" type="button" data-i18n="result.copy">📋 Copier l'estimation</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= MARKET RATES ======= -->
+  <section class="section section-alt" id="rates">
+    <div class="container">
+      <div class="section-head">
+        <h2 data-i18n="rates.title">Tarifs de référence du marché</h2>
+        <p data-i18n="rates.sub">Fourchettes constatées sur les plateformes de commissions (VRChat, réseaux créatifs, freelancing). Données indicatives.</p>
+      </div>
+      <div class="rates-tabs">
+        <button class="rate-tab active" data-rates="vrchat" type="button">🕶️ VRChat</button>
+        <button class="rate-tab" data-rates="online" type="button">💻 <span data-i18n="calc.catOnline">Prestations en ligne</span></button>
+      </div>
+      <div class="rates-grid" id="rates-grid"><!-- injected --></div>
+    </div>
+  </section>
+
+  <!-- ======= TIPS ======= -->
+  <section class="section" id="tips">
+    <div class="container">
+      <div class="section-head">
+        <h2 data-i18n="tips.title">Conseils pour bien fixer vos prix</h2>
+      </div>
+      <div class="tips-grid" id="tips-grid"><!-- injected --></div>
+    </div>
+  </section>
+
+  <!-- ======= FOOTER ======= -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <svg class="brand-logo small" viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M36.6 6.2 55.9 25.5a6 6 0 0 1 0 8.5L34.1 55.8a6 6 0 0 1-8.5 0L6.3 36.5A6 6 0 0 1 4.5 32.2l.3-19.9A6 6 0 0 1 10.7 6.4l19.9-.2a6 6 0 0 1 4.3 1.7 6 6 0 0 1 1.7 0Z" fill="url(#lg)"/>
+          <circle cx="17.5" cy="17.5" r="4.2" fill="#0b1220"/>
+          <path d="M24 38.5l6.5 6.5L45 30.5" fill="none" stroke="#0b1220" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="brand-name">Good<em>Price</em></span>
+      </div>
+      <p class="footer-note" data-i18n="footer.note">
+        Les estimations sont indicatives et ne constituent pas un conseil juridique ou fiscal.
+        Fait avec 💚 pour les créateurs.
+      </p>
+      <p class="footer-copy">© 2026 Good Price</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
